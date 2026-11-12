@@ -1,17 +1,9 @@
-import { definePlugin } from "@halo-dev/console-shared";
 import BasicLayout from "@console/layouts/BasicLayout.vue";
-import UserStatsWidget from "./widgets/UserStatsWidget.vue";
-import UserList from "./UserList.vue";
-import UserDetail from "./UserDetail.vue";
 import { IconUserSettings } from "@halo-dev/components";
+import { definePlugin } from "@halo-dev/ui-shared";
 import { markRaw } from "vue";
-import NotificationWidget from "./widgets/NotificationWidget.vue";
 
 export default definePlugin({
-  components: {
-    UserStatsWidget,
-    NotificationWidget,
-  },
   routes: [
     {
       path: "/users",
@@ -22,7 +14,7 @@ export default definePlugin({
         searchable: true,
         permissions: ["system:users:view"],
         menu: {
-          name: "core.sidebar.menu.items.users",
+          name: /* @x18n-key */ "core.sidebar.menu.items.users",
           group: "system",
           icon: markRaw(IconUserSettings),
           priority: 1,
@@ -33,14 +25,14 @@ export default definePlugin({
         {
           path: "",
           name: "Users",
-          component: UserList,
+          component: () => import("./UserList.vue"),
         },
         {
           path: ":name",
           name: "UserDetail",
-          component: UserDetail,
+          component: () => import("./UserDetail.vue"),
           meta: {
-            title: "core.user.detail.title",
+            title: /* @x18n-key */ "core.user.detail.title",
           },
         },
       ],

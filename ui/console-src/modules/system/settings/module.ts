@@ -1,8 +1,7 @@
-import { definePlugin } from "@halo-dev/console-shared";
-import SystemSettings from "./SystemSettings.vue";
-import { IconSettings } from "@halo-dev/components";
-import { markRaw } from "vue";
 import BasicLayout from "@console/layouts/BasicLayout.vue";
+import { IconSettings } from "@halo-dev/components";
+import { definePlugin } from "@halo-dev/ui-shared";
+import { markRaw } from "vue";
 
 export default definePlugin({
   components: {},
@@ -15,7 +14,7 @@ export default definePlugin({
         title: "core.setting.title",
         permissions: ["system:settings:view"],
         menu: {
-          name: "core.sidebar.menu.items.settings",
+          name: /* @x18n-key */ "core.sidebar.menu.items.settings",
           group: "system",
           icon: markRaw(IconSettings),
           priority: 2,
@@ -25,7 +24,7 @@ export default definePlugin({
         {
           path: "",
           name: "SystemSetting",
-          component: SystemSettings,
+          component: () => import("./SystemSettings.vue"),
         },
       ],
     },

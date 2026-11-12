@@ -1,8 +1,7 @@
-import { definePlugin } from "@halo-dev/console-shared";
-import BasicLayout from "@uc/layouts/BasicLayout.vue";
 import { IconAccountCircleLine } from "@halo-dev/components";
+import { definePlugin } from "@halo-dev/ui-shared";
+import BasicLayout from "@uc/layouts/BasicLayout.vue";
 import { markRaw } from "vue";
-import Profile from "./Profile.vue";
 
 export default definePlugin({
   ucRoutes: [
@@ -15,12 +14,12 @@ export default definePlugin({
         {
           path: "profile",
           name: "Profile",
-          component: Profile,
+          component: () => import("./Profile.vue"),
           meta: {
-            title: "core.uc_profile.title",
+            title: /* @x18n-key */ "core.uc_profile.title",
             searchable: true,
             menu: {
-              name: "core.uc_sidebar.menu.items.profile",
+              name: /* @x18n-key */ "core.uc_sidebar.menu.items.profile",
               group: "dashboard",
               icon: markRaw(IconAccountCircleLine),
               priority: 0,

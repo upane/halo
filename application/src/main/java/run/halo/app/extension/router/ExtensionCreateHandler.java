@@ -4,7 +4,6 @@ import static run.halo.app.extension.router.ExtensionRouterFunctionFactory.PathP
 
 import java.net.URI;
 import org.springframework.http.MediaType;
-import org.springframework.lang.NonNull;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
@@ -26,16 +25,18 @@ class ExtensionCreateHandler implements CreateHandler {
     }
 
     @Override
-    @NonNull
-    public Mono<ServerResponse> handle(@NonNull ServerRequest request) {
+    public Mono<ServerResponse> handle(ServerRequest request) {
         return request.bodyToMono(Unstructured.class)
-            .switchIfEmpty(Mono.error(() -> new ExtensionConvertException(
-                "Cannot read body to " + scheme.groupVersionKind())))
-            .flatMap(client::create)
-            .flatMap(createdExt -> ServerResponse
-                .created(URI.create(pathPattern() + "/" + createdExt.getMetadata().getName()))
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(createdExt));
+                .switchIfEmpty(Mono.error(
+                        () -> new ExtensionConvertException("Cannot read body to " + scheme.groupVersionKind())))
+                .flatMap(unstructured -> {
+                    ExtensionIdentity.requireGroupVersionKind(scheme, unstructured);
+                    return client.create(unstructured);
+                })
+                .flatMap(createdExt -> ServerResponse.created(URI.create(
+                                pathPattern() + "/" + createdExt.getMetadata().getName()))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(createdExt));
     }
 
     @Override

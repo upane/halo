@@ -1,7 +1,6 @@
-import { definePlugin } from "@halo-dev/console-shared";
 import BasicLayout from "@console/layouts/BasicLayout.vue";
-import Menus from "./Menus.vue";
 import { IconListSettings } from "@halo-dev/components";
+import { definePlugin } from "@halo-dev/ui-shared";
 import { markRaw } from "vue";
 
 export default definePlugin({
@@ -16,7 +15,7 @@ export default definePlugin({
         searchable: true,
         permissions: ["system:menus:view"],
         menu: {
-          name: "core.sidebar.menu.items.menus",
+          name: /* @x18n-key */ "core.sidebar.menu.items.menus",
           group: "interface",
           icon: markRaw(IconListSettings),
           priority: 1,
@@ -26,7 +25,7 @@ export default definePlugin({
         {
           path: "",
           name: "Menus",
-          component: Menus,
+          component: () => import("./Menus.vue"),
         },
       ],
     },
